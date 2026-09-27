@@ -359,6 +359,9 @@
                                 <!-- <span class="issue-id">Token: #{{ issue['id'] }}</span> -->
                             </div>
                         </td>
+                        <td data-label="Title & Description">
+                            <div class="issue-title">{{ issue['title'] }}</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">{{ issue['description'] }}</div>
                         <td data-label="Subject" class="issue-title">{{ issue['title'] }}</td>
                         <td data-label="Category" class="category-text">{{ issue['category'] }}</td>
                         <td data-label="Priority">
