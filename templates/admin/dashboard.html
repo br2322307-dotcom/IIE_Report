@@ -67,6 +67,26 @@
             padding: 0 1.5rem;
         }
 
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-surface);
+            padding: 1.25rem 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        
+        .stat-card h4 { margin: 0; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+        .stat-card p { margin: 8px 0 0 0; font-size: 2rem; font-weight: 700; color: var(--brand-dark); }
+        .stat-card .danger-text { color: var(--danger); }
+
         .data-card {
             background: var(--bg-surface);
             border-radius: 12px;
@@ -113,8 +133,9 @@
 
         /* Typography & Structure inside cells */
         .meta-group { display: flex; flex-direction: column; gap: 4px; }
-        .issue-id { font-weight: 600; color: var(--brand-dark); }
-        .student-id { font-size: 0.75rem; color: var(--text-muted); font-family: monospace; }
+        
+        .issue-id { font-size: 0.75rem; color: #94a3b8; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; display: inline-block; width: fit-content; }
+        .student-id { font-size: 0.8rem; font-weight: 600; color: var(--brand-dark); font-family: monospace; }
         
         .issue-title { font-weight: 500; color: var(--text-main); }
         .category-text { color: var(--text-muted); text-transform: capitalize; }
@@ -217,10 +238,9 @@
 
             .workspace-main { margin-top: -2.5rem; padding: 0 1rem; }
             
-            /* Transforming Table into Cards for Mobile */
             table, thead, tbody, th, td, tr { display: block; }
             
-            thead tr { display: none; /* Hide headers */ }
+            thead tr { display: none; }
             
             tbody tr {
                 background: #fff;
@@ -245,7 +265,6 @@
             
             td:last-child { border-bottom: none; }
 
-            /* Generating labels dynamically via CSS content */
             td::before {
                 content: attr(data-label);
                 font-weight: 600;
@@ -257,11 +276,9 @@
                 letter-spacing: 0.05em;
             }
 
-            /* Adjust internal layout for Mobile Cards */
             .issue-title { font-size: 1rem; }
             .badge, .status-verified { align-self: flex-start; margin-top: 4px; }
             
-            /* Make form span full width on mobile */
             form[action*="update_status"] { width: 100%; }
             .action-group { max-width: 100%; display: flex; }
         }
@@ -280,6 +297,21 @@
 
     <!-- Main Workspace -->
     <main class="workspace-main">
+        
+        <!-- Dashboard Stats Panel -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h4>Campus Total Reports</h4>
+                <!-- Counts all issues in the database -->
+                <p>{{ issues|length }}</p>
+            </div>
+            <div class="stat-card">
+                <h4>Pending Issues</h4>
+                <!-- Counts only issues where the status is 'Pending' using Jinja filter -->
+                <p class="danger-text">{{ issues | selectattr('status', 'equalto', 'Pending') | list | length }}</p>
+            </div>
+        </div>
+
         <div class="data-card">
             <div class="card-header">
                 <h3>Reported Issues Registry</h3>
@@ -288,6 +320,7 @@
             <table>
                 <thead>
                     <tr>
+                        <th>Sl No.</th>
                         <th>Ticket Info</th>
                         <th>Subject</th>
                         <th>Category</th>
@@ -298,10 +331,12 @@
                 <tbody>
                     {% for issue in issues %}
                     <tr>
+                        <td data-label="Sl No." style="font-weight: 600; font-size: 0.95rem;">{{ loop.index }}</td>
+                        
                         <td data-label="Ticket Info">
                             <div class="meta-group">
-                                <span class="issue-id">#{{ issue['id'] }}</span>
                                 <span class="student-id">User: {{ issue['student_id'] }}</span>
+                                <span class="issue-id">Token: #{{ issue['id'] }}</span>
                             </div>
                         </td>
                         <td data-label="Subject" class="issue-title">{{ issue['title'] }}</td>
@@ -332,9 +367,9 @@
                         </td>
                     </tr>
                     {% else %}
-                    <!-- Empty State for Professional Software Look -->
+                    <!-- Empty State -->
                     <tr>
-                        <td colspan="5" style="text-align: center; padding: 4rem 2rem; color: var(--text-muted); display: block;">
+                        <td colspan="6" style="text-align: center; padding: 4rem 2rem; color: var(--text-muted); display: block;">
                             <svg style="margin-bottom: 12px; color: #cbd5e1;" width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
                             <div style="font-weight: 500; font-size: 0.95rem; color: #64748b;">Inbox Zero</div>
                             <div style="font-size: 0.8125rem; margin-top: 4px;">No campus issues require your attention right now.</div>
