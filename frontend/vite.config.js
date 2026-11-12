@@ -17,7 +17,7 @@ export default defineConfig({
     // This makes the browser think everything is running on the same port, ensuring a smooth connection!
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:5000',
+        target: 'https://iie-report-3agoc1z57-br2322307-dotcom.vercel.app/',
         changeOrigin: true,
       }
     }
