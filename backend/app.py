@@ -601,6 +601,15 @@ def handle_announcements():
         return jsonify({'success': True})
 
 
+
+@app.route("/api/health", methods=["GET"])
+def health():
+    return {
+        "status": "success",
+        "message": "Backend is running!"
+    }, 200
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
 
