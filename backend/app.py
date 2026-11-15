@@ -20,7 +20,14 @@ from database.db import users_collection, issues_collection, pending_users_colle
 
 app = Flask(__name__)
 
- 
+ # Backend Root Route
+@app.route("/", methods=["GET"])
+def home():
+    return jsonify({
+        "success": True,
+        "message": "IIE Report Backend is Running",
+        "health_check": "/api/health"
+    }), 200
 
 # ... The rest of your code remains the same ...
 
